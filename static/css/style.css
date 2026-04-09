@@ -49,3 +49,48 @@ a {
   right: 20px;
   z-index: 10;
 }
+
+.latest-discounts .card {
+  height: 220px;
+}
+
+.latest-discounts .card-image-top {
+  height: auto;
+  max-height: 160px;
+  object-fit: contain;
+  object-position: center;
+  width: 100%;
+}
+
+.latest-discounts .card-body {
+  padding: 0.5rem;
+}
+
+.latest-discounts .card-title {
+  font-size: 0.9rem;
+  margin-bottom: 0.25rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.latest-discounts .card-text {
+  font-size: 0.8rem;
+}
+
+.compact-products .card {
+  height: 280px;
+}
+
+.compact-products .card-image-top {
+  height: 160px;
+  object-fit: cover;
+}
+
+.compact-products .card-body {
+  padding: 0.5rem;
+}
+
+.compact-products .card-title {
+  font-size: 0.95rem;
+}
