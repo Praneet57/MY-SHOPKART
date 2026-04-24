@@ -125,8 +125,8 @@ def product_details(request, cname, pname):
     # check category exists
     if Catagory.objects.filter(name=cname, status=0).exists():
 
-        # safely get product (prevents crash)
-        product = get_object_or_404(Product, name=pname, status=0)
+        # ✅ FIX: case-insensitive match
+        product = get_object_or_404(Product, name__iexact=pname, status=0)
 
         return render(
             request,
