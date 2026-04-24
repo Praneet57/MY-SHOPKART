@@ -14,7 +14,13 @@ MYKART | Online Shopping
       {% for item in products %}
       <div class="col-md-4 col-lg-3">
         <div class="card my-3">
+
+          {% if item.product_image %}
           <img src="{{item.product_image.url}}"  class="card-image-top" alt="Categories">
+          {% else %}
+          <img src="https://via.placeholder.com/250x200" class="card-image-top" alt="No Image">
+          {% endif %}
+
           <a href="{% url 'product_details' item.category.name item.name %}">
           <div class="card-body">
             <h5 class="card-title text-primary">{{ item.name }}</h5>
@@ -30,7 +36,3 @@ MYKART | Online Shopping
     </div>
   </div>
 {% endblock content %}
-
-
-    
-   
