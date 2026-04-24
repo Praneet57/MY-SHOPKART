@@ -1,9 +1,10 @@
 from django.http import  JsonResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from shop.form import CustomUserForm
 from . models import *
 from django.contrib import messages
 from django.contrib.auth import authenticate,login,logout
+from urllib.parse import unquote
 import json
 
 def home(request):
@@ -117,14 +118,22 @@ def collectionsview(request,name):
     messages.warning(request,"No Such Catagory Found")
     return redirect('collections')
 
-def product_details(request,cname,pname):
-    if(Catagory.objects.filter(name=cname,status=0)):
-      if(Product.objects.filter(name=pname,status=0)):
-        products=Product.objects.filter(name=pname,status=0).first()
-        return render(request,"shop/products/product_details.html",{"products":products})
-      else:
-        messages.error(request,"No Such Produtct Found")
-        return redirect('collections')
+def product_details(request, cname, pname):
+    # decode URL (handles spaces like iPhone%2014)
+    pname = unquote(pname)
+
+    # check category exists
+    if Catagory.objects.filter(name=cname, status=0).exists():
+
+        # safely get product (prevents crash)
+        product = get_object_or_404(Product, name=pname, status=0)
+
+        return render(
+            request,
+            "shop/products/product_details.html",
+            {"products": product}
+        )
+
     else:
-      messages.error(request,"No Such Catagory Found")
-      return redirect('collections')
+        messages.error(request, "No Such Catagory Found")
+        return redirect('collections')
