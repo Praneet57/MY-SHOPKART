@@ -119,20 +119,25 @@ def collectionsview(request,name):
     return redirect('collections')
 
 def product_details(request, cname, pname):
-    # decode URL (handles spaces like iPhone%2014)
     pname = unquote(pname)
 
-    # check category exists
     if Catagory.objects.filter(name=cname, status=0).exists():
 
-        # ✅ FIX: case-insensitive match
-        product = get_object_or_404(Product, name__iexact=pname, status=0)
+        # ✅ flexible search (works even if name slightly different)
+        product = Product.objects.filter(
+            name__icontains=pname,
+            status=0
+        ).first()
 
-        return render(
-            request,
-            "shop/products/product_details.html",
-            {"products": product}
-        )
+        if product:
+            return render(
+                request,
+                "shop/products/product_details.html",
+                {"products": product}
+            )
+        else:
+            messages.error(request, "No Such Product Found")
+            return redirect('collections')
 
     else:
         messages.error(request, "No Such Catagory Found")
