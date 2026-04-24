@@ -4,7 +4,6 @@ from shop.form import CustomUserForm
 from . models import *
 from django.contrib import messages
 from django.contrib.auth import authenticate,login,logout
-from urllib.parse import unquote
 import json
 
 def home(request):
@@ -118,27 +117,18 @@ def collectionsview(request,name):
     messages.warning(request,"No Such Catagory Found")
     return redirect('collections')
 
-def product_details(request, cname, pname):
-    pname = unquote(pname)
-
+def product_details(request, cname, pid):
+    
     if Catagory.objects.filter(name=cname, status=0).exists():
 
-        # ✅ flexible search (works even if name slightly different)
-        product = Product.objects.filter(
-            name__icontains=pname,
-            status=0
-        ).first()
+        product = get_object_or_404(Product, id=pid, status=0)
 
-        if product:
-            return render(
-                request,
-                "shop/products/product_details.html",
-                {"products": product}
-            )
-        else:
-            messages.error(request, "No Such Product Found")
-            return redirect('collections')
+        return render(
+            request,
+            "shop/products/product_details.html",
+            {"products": product}
+        )
 
     else:
-        messages.error(request, "No Such Catagory Found")
+        messages.error(request, "No Such Category Found")
         return redirect('collections')

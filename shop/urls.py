@@ -13,11 +13,10 @@ urlpatterns = [
     path('remove_cart/<str:cid>', views.remove_cart, name="remove_cart"),
     path('collections', views.collections, name="collections"),
 
-    # 🔥 FIX 1: give unique name
     path('collections/<str:name>', views.collectionsview, name="collectionsview"),
 
-    # 🔥 FIX 2: allow special characters safely
-    path('collections/<str:cname>/<path:pname>', views.product_details, name="product_details"),
+    # ✅ FIXED (use product ID instead of name)
+    path('collections/<str:cname>/<int:pid>', views.product_details, name="product_details"),
 
     path('addtocart', views.add_to_cart, name="addtocart"),
 ]
