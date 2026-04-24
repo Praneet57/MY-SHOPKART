@@ -19,6 +19,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # ✅ ADD THIS
+    'cloudinary',
+    'cloudinary_storage',
+
     'shop'
 ]
 
@@ -54,7 +59,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'praneet_project.wsgi.application'
 
 
-# ✅ FIXED DATABASE CONFIG
+# ✅ DATABASE CONFIG
 DATABASE_URL = os.environ.get("DATABASE_URL")
 
 if DATABASE_URL:
@@ -62,7 +67,6 @@ if DATABASE_URL:
         'default': dj_database_url.parse(DATABASE_URL)
     }
 else:
-    # fallback for local (SQLite)
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
@@ -88,23 +92,34 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_TZ = True
 
 
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-MEDIA_URL = '/images/'
-MEDIA_ROOT = BASE_DIR / 'static/uploads'
-
 STATICFILES_DIRS = [
     BASE_DIR / 'static'
 ]
+
+# ❌ REMOVE local media usage (not needed for Render)
+# MEDIA_URL = '/images/'
+# MEDIA_ROOT = BASE_DIR / 'static/uploads'
+
+# ✅ USE CLOUDINARY STORAGE
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+
+# ✅ CLOUDINARY CONFIG
+import cloudinary
+
+cloudinary.config(
+    cloud_name=os.environ.get("CLOUDINARY_CLOUD_NAME"),
+    api_key=os.environ.get("CLOUDINARY_API_KEY"),
+    api_secret=os.environ.get("CLOUDINARY_API_SECRET")
+)
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
